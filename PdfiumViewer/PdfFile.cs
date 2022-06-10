@@ -509,31 +509,57 @@ namespace PdfiumViewer
                         {
                             try
                             {
-                                FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
                                 IntPtr bitmap = NativeMethods.FPDFImageObj_GetBitmap(obj);
                                 int height = NativeMethods.FPDFBitmap_GetHeight(bitmap);
                                 int width = NativeMethods.FPDFBitmap_GetWidth(bitmap);
                                 int stride = NativeMethods.FPDFBitmap_GetStride(bitmap);
-                                
-                                long bufferSize2 = height * width * metadata.bits_per_pixel / 8;
                                 IntPtr pointer = NativeMethods.FPDFBitmap_GetBuffer(bitmap);
+                                BitmapFormats format = NativeMethods.FPDFBitmap_GetFormat(bitmap);
+                                FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
+                                Bitmap bmp = null;
+                                switch (format) { 
+                                    case BitmapFormats.FPDFBitmap_BGR:
+                                        bmp = new Bitmap(width, height, stride, PixelFormat.Format24bppRgb, pointer);
+                                        break;
+                                    case BitmapFormats.FPDFBitmap_BGRA:
+                                         bmp = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
+                                         break;
+                                    case BitmapFormats.FPDFBitmap_BGRx:
+                                        bmp = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
+                                        break;
+                                    case BitmapFormats.FPDFBitmap_Gray:
+                                        bmp = new Bitmap(width, height, stride, PixelFormat.Format8bppIndexed, pointer);
+                                        bmp.SetResolution(metadata.horizontal_dpi, metadata.vertical_dpi);
 
-                                byte[] dataBuffer = new byte[bufferSize2];
-                                Marshal.Copy(pointer, dataBuffer, 0, (int)bufferSize2);
+                                        //long dataLength = height * width;
+                                        //byte[] dataBuffer = new byte[dataLength];
+                                        //Marshal.Copy(pointer, dataBuffer, 0, (int)dataLength);
+                                        //bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+                                        //bmp.SetResolution(metadata.horizontal_dpi, metadata.vertical_dpi);
+                                        //BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+                                        //Marshal.Copy(dataBuffer, 0, data.Scan0, (int)dataLength);
+                                        //bmp.UnlockBits(data);
 
-                                var nbitmap = Convert_DATA_TO_BITMAP(dataBuffer, width, height);
+                                        break;
+                                }
+                                //FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
+                                //long bufferSize2 = height * width * metadata.bits_per_pixel / 8;
+                                //long bufferSize2 = height * stride;
+                                //byte[] dataBuffer = new byte[bufferSize2];
+                                //Marshal.Copy(pointer, dataBuffer, 0, (int)bufferSize2);
+                                //var nbitmap = Convert_DATA_TO_BITMAP(dataBuffer, stride, width, height);
                                 //var nbitmap = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
-                                images.Add(nbitmap);
-
+                                if (bmp != null)
+                                {
+                                    images.Add(bmp);
+                                }
                                 //nbitmap.Save($"D:\\Users\\Administrator\\Desktop\\imgs\\TMP_{index}.png", ImageFormat.Png);
-
-
-                              //  long bufferSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, null, 0);
-                              //  byte[] buffer = new byte[bufferSize];
+                                //long bufferSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, null, 0);
+                                //byte[] buffer = new byte[bufferSize];
                                 ////long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
-                              //  long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
-                              //  Bitmap bmp = Convert_BGRA_TO_ARGB(buffer, width, height);
-                              //  images.Add(bmp);
+                                //long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
+                                //Bitmap bmp = Convert_BGRA_TO_ARGB(buffer, width, height);
+                                //images.Add(bmp);
                                 //long  dataSize = bufferSize;
                                 //MemoryStream memoryStream = new MemoryStream(buffer, 0, (int)dataSize);
                                 //Image img = Bitmap.FromStream(memoryStream);
@@ -555,29 +581,6 @@ namespace PdfiumViewer
                 }
             }
             return images;
-        }
-
-
-        // BGR TO RGB
-        public Bitmap Convert_DATA_TO_BITMAP(byte[] DATA, int width, int height)
-        {
-            Bitmap Bm = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-
-            int index;
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    // BGRA TO ARGB
-                    index = 3 * (x + (y * width));
-                    Color c = Color.FromArgb(
-                        DATA[index + 2],
-                        DATA[index + 1],
-                        DATA[index + 0]);
-                    Bm.SetPixel(x, y, c);
-                }
-            }
-            return Bm;
         }
 
         // BGR TO RGB

@@ -1066,6 +1066,7 @@ namespace PdfiumViewer
 
         public enum BitmapFormats
         {
+            FPDFBitmap_Unknown = 0,
             /// <summary>
             /// Gray scale bitmap, one byte per pixel.
             /// </summary>

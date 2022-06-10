@@ -21,8 +21,8 @@ namespace TSTest
             if (document != null)
             {
                 int pageCount = document.PageCount;
-                pageCount = 1;
-                for (var index = 0; index < pageCount; index++)
+                pageCount = 10;
+                for (var index = 9; index < pageCount; index++)
                 {
                     List<Image> images = document.GetPageImages(index);
                     if (images.Count > 0)
