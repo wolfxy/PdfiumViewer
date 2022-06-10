@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using static PdfiumViewer.NativeMethods;
 
 namespace PdfiumViewer
 {
@@ -471,6 +473,72 @@ namespace PdfiumViewer
                 (float)(right - left),
                 (float)(bottom - top)
             );
+        }
+
+        public int GetPageCountObject(int page)
+        {
+            using (var pageData = new PageData(_document, _form, page))
+            {
+                int count = NativeMethods.FPDFPage_Count_Object(pageData.Page);
+                return count;
+            }
+        }
+
+        public object GetPageObject(int page, int index)
+        {
+            using (var pageData = new PageData(_document, _form, page))
+            {
+                IntPtr objectPtr = NativeMethods.FPDFPage_GetObject(pageData.Page, index);
+                return objectPtr;
+            }
+        }
+
+        public List<Image> GetPdfImages(int page)
+        {
+            List<Image> images = new List<Image>();
+            using (var pageData = new PageData(_document, _form, page))
+            {
+                int count = NativeMethods.FPDFPage_Count_Object(pageData.Page);
+                if (count > 0)
+                {
+                    for (var index = 0; index < count; index++)
+                    {
+                        var obj = NativeMethods.FPDFPage_GetObject(pageData.Page, index);
+                        PageObjectTypes type = NativeMethods.FPDFPageObject_GetType(obj);
+                        if (PageObjectTypes.FPDF_PAGEOBJ_IMAGE == type)
+                        {
+                            try
+                            {
+                                FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
+                                IntPtr bitmap = NativeMethods.FPDFImageObj_GetBitmap(obj);
+                                int height = NativeMethods.FPDFBitmap_GetHeight(bitmap);
+                                int width = NativeMethods.FPDFBitmap_GetWidth(bitmap);
+                                int stride = NativeMethods.FPDFBitmap_GetStride(bitmap);
+                                long bufferSize = height * width * 4;
+                                //long bufferSize = height * stride;
+                                byte[] buffer = new byte[bufferSize];
+                                long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
+                                //long dataSize = NativeMethods.FPDFImageObj_GetImageDataDecoded(obj, buffer, bufferSize);
+                                MemoryStream memoryStream = new MemoryStream(buffer, 0, (int)dataSize);
+                                Image img = Bitmap.FromStream(memoryStream);
+                                images.Add(img);
+                                //int filterCount = NativeMethods.FPDFImageObj_GetImageFilterCount(obj);
+                                //if (filterCount > 0)
+                                //{
+                                //    StringBuilder stringBuilder = new StringBuilder(256);
+                                //    long filterLen = NativeMethods.FPDFImageObj_GetImageFilter(obj, 0, stringBuilder, 256);
+                                //    string n = stringBuilder.ToString();
+                                //}
+                            }
+                            catch(Exception e)
+                            {
+
+                            }
+                        }
+                    }
+                }
+            }
+            return images;
         }
 
         public string GetPdfText(int page)

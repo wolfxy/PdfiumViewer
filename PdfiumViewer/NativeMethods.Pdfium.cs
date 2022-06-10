@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 #pragma warning disable 1591
 
@@ -30,7 +31,7 @@ namespace PdfiumViewer
         {
             lock (LockString)
             {
-                Imports.FPDF_Release();
+               Imports.FPDF_Release();
             }
         }
 
@@ -481,6 +482,118 @@ namespace PdfiumViewer
             }
         }
 
+        public static int FPDFPage_Count_Object(IntPtr page)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFPage_CountObject(page);
+            }
+        }
+
+        public static IntPtr FPDFPage_GetObject(IntPtr page, int index)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFPage_GetObject(page, index);
+            }
+        }
+
+
+        public static PageObjectTypes FPDFPageObject_GetType(IntPtr obj)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFPageObj_GetType(obj);
+            }
+        }
+
+
+        public static long FPDFImageObj_GetImageDataRaw(IntPtr obj, byte[] buffer, long length)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFImageObj_GetImageDataRaw(obj, buffer, length);
+            }
+        }
+
+        public static long FPDFImageObj_GetImageDataDecoded(IntPtr obj, byte[] buffer, long length)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFImageObj_GetImageDataDecoded(obj, buffer, length);
+            }
+        }
+
+        public static int FPDFBitmap_GetHeight(IntPtr image)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFBitmap_GetHeight(image);
+            }
+        }
+
+        public static int FPDFBitmap_GetWidth(IntPtr image)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFBitmap_GetWidth(image);
+            }
+        }
+
+        public static int FPDFBitmap_GetStride(IntPtr image)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFBitmap_GetStride(image);
+            }
+        }
+
+        public static BitmapFormats FPDFBitmap_GetFormat(IntPtr image)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFBitmap_GetFormat(image);
+            }
+        }
+
+        public static long FPDFImageObj_GetImageFilter(IntPtr obj, int index, StringBuilder buffer, long length)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFImageObj_GetImageFilter(obj, index, buffer, length);
+            }
+        }
+
+        public static FPDF_IMAGEOBJ_METADATA FPDFImageObj_GetImageMetadata(IntPtr image_obj, IntPtr page)
+        {
+            lock (LockString)
+            {
+                FPDF_IMAGEOBJ_METADATA metedata = new FPDF_IMAGEOBJ_METADATA();
+                if (Imports.FPDFImageObj_GetImageMetadata(image_obj, page, metedata))
+                {
+                    return metedata;
+                }
+                return null;
+            }
+        }
+
+        public static int FPDFImageObj_GetImageFilterCount(IntPtr obj)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFImageObj_GetImageFilterCount(obj);
+            }
+        }
+
+        public static IntPtr FPDFImageObj_GetBitmap(IntPtr obj)
+        {
+            lock (LockString)
+            {
+                IntPtr img = Imports.FPDFImageObj_GetBitmap(obj);
+                return img;
+            }
+        }
+
         public static bool FPDF_SaveAsCopy(IntPtr doc, Stream output, FPDF_SAVE_FLAGS flags)
         {
             int id = StreamManager.Register(output);
@@ -591,217 +704,258 @@ namespace PdfiumViewer
 
         private static class Imports
         {
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_AddRef();
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_Release();
 
-            [DllImport("pdfium.dll", CharSet = CharSet.Ansi)]            
+            [DllImport("pdfium64.dll", CharSet = CharSet.Ansi)]            
             public static extern IntPtr FPDF_LoadCustomDocument([MarshalAs(UnmanagedType.LPStruct)]FPDF_FILEACCESS access, string password);
 
-            [DllImport("pdfium.dll", CharSet = CharSet.Ansi)]
+            [DllImport("pdfium64.dll", CharSet = CharSet.Ansi)]
             public static extern IntPtr FPDF_LoadMemDocument(SafeHandle data_buf, int size, string password);
 
-            [DllImport("pdfium.dll", CharSet = CharSet.Ansi)]
+            [DllImport("pdfium64.dll", CharSet = CharSet.Ansi)]
             public static extern IntPtr FPDF_LoadMemDocument(byte[] data_buf, int size, string password);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_CloseDocument(IntPtr document);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern int FPDF_GetPageCount(IntPtr document);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern uint FPDF_GetDocPermissions(IntPtr document);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFDOC_InitFormFillEnvironment(IntPtr document, FPDF_FORMFILLINFO formInfo);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_SetFormFieldHighlightColor(IntPtr hHandle, int fieldType, uint color);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_SetFormFieldHighlightAlpha(IntPtr hHandle, byte alpha);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FORM_DoDocumentJSAction(IntPtr hHandle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FORM_DoDocumentOpenAction(IntPtr hHandle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFDOC_ExitFormFillEnvironment(IntPtr hHandle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FORM_DoDocumentAAction(IntPtr hHandle, FPDFDOC_AACTION aaType);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDF_LoadPage(IntPtr document, int page_index);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFText_LoadPage(IntPtr page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FORM_OnAfterLoadPage(IntPtr page, IntPtr _form);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FORM_DoPageAAction(IntPtr page, IntPtr _form, FPDFPAGE_AACTION fPDFPAGE_AACTION);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern double FPDF_GetPageWidth(IntPtr page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern double FPDF_GetPageHeight(IntPtr page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FORM_OnBeforeClosePage(IntPtr page, IntPtr _form);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFText_ClosePage(IntPtr text_page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_ClosePage(IntPtr page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_RenderPage(IntPtr dc, IntPtr page, int start_x, int start_y, int size_x, int size_y, int rotate, FPDF flags);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_RenderPageBitmap(IntPtr bitmapHandle, IntPtr page, int start_x, int start_y, int size_x, int size_y, int rotate, FPDF flags);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern int FPDF_GetPageSizeByIndex(IntPtr document, int page_index, out double width, out double height);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFBitmap_CreateEx(int width, int height, int format, IntPtr first_scan, int stride);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFBitmap_FillRect(IntPtr bitmapHandle, int left, int top, int width, int height, uint color);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFBitmap_Destroy(IntPtr bitmapHandle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFText_FindStart(IntPtr page, byte[] findWhat, FPDF_SEARCH_FLAGS flags, int start_index);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern int FPDFText_GetSchResultIndex(IntPtr handle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern int FPDFText_GetSchCount(IntPtr handle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern int FPDFText_GetText(IntPtr page, int start_index, int count, byte[] result);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFText_GetCharBox(IntPtr page, int index, out double left, out double right, out double bottom, out double top);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern int FPDFText_CountChars(IntPtr page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDFText_FindNext(IntPtr handle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFText_FindClose(IntPtr handle);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDFLink_Enumerate(IntPtr page, ref int startPos, out IntPtr linkAnnot);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFLink_GetDest(IntPtr document, IntPtr link);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern uint FPDFDest_GetPageIndex(IntPtr document, IntPtr dest);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDFLink_GetAnnotRect(IntPtr linkAnnot, FS_RECTF rect);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_DeviceToPage(IntPtr page, int start_x, int start_y, int size_x, int size_y, int rotate, int device_x, int device_y, out double page_x, out double page_y);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_PageToDevice(IntPtr page, int start_x, int start_y, int size_x, int size_y, int rotate, double page_x, double page_y, out int device_x, out int device_y);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFLink_GetAction(IntPtr link);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern uint FPDFAction_GetURIPath(IntPtr document, IntPtr action, StringBuilder buffer, uint buflen);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFBookmark_GetFirstChild(IntPtr document, IntPtr bookmark);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFBookmark_GetNextSibling(IntPtr document, IntPtr bookmark);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern uint FPDFBookmark_GetTitle(IntPtr bookmark, byte[] buffer, uint buflen);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFBookmark_GetAction(IntPtr bookmark);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFBookmark_GetDest(IntPtr document, IntPtr bookmark);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern uint FPDFAction_GetType(IntPtr action);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern uint FPDF_GetLastError();
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern uint FPDF_GetMetaText(IntPtr document, string tag, byte[] buffer, uint buflen);
 
             #region Save/Edit APIs
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDF_ImportPages(IntPtr destDoc, IntPtr srcDoc, [MarshalAs(UnmanagedType.LPStr)]string pageRange, int index);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDF_SaveAsCopy(IntPtr doc,
                 [MarshalAs(UnmanagedType.LPStruct)]FPDF_FILEWRITE writer,
                 [MarshalAs(UnmanagedType.I4)]FPDF_SAVE_FLAGS flag);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDF_SaveWithVersion(IntPtr doc,
                 [MarshalAs(UnmanagedType.LPStruct)]FPDF_FILEWRITE writer,
                 [MarshalAs(UnmanagedType.I4)]FPDF_SAVE_FLAGS flags,
                 int fileVersion);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFPage_New(IntPtr doc, int index, double width, double height);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFPage_Delete(IntPtr doc, int index);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern int FPDFPage_GetRotation(IntPtr page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFPage_SetRotation(IntPtr page, int rotate);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDF_CreateNewDocument();
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern IntPtr FPDFPageObj_NewImgeObj(IntPtr document);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDFImageObj_SetBitmap(IntPtr pages, int count, IntPtr imageObject, IntPtr bitmap);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFPageObj_Transform(IntPtr page, double a, double b, double c, double d, double e, double f);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDFPage_InsertObject(IntPtr page, IntPtr pageObject);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern bool FPDFPage_GenerateContent(IntPtr page);
 
-            [DllImport("pdfium.dll")]
+            [DllImport("pdfium64.dll")]
             public static extern void FPDF_FFLDraw(IntPtr form, IntPtr bitmap, IntPtr page, int start_x, int start_y, int size_x, int size_y, int rotate, FPDF flags);
 
+            [DllImport("pdfium64.dll")]
+            public static extern int FPDFPage_CountObject(IntPtr page);
+
+            [DllImport("pdfium64.dll")]
+            public static extern IntPtr FPDFPage_GetObject(IntPtr page, int index);
+
+            [DllImport("pdfium64.dll")]
+            public static extern PageObjectTypes FPDFPageObj_GetType(IntPtr page_object);
+
+            [DllImport("pdfium64.dll")]
+            public static extern long FPDFImageObj_GetImageDataRaw(IntPtr image_object, byte[] buffer, long buflen);
+
+            [DllImport("pdfium64.dll")]
+            public static extern long FPDFImageObj_GetImageDataDecoded(IntPtr image_object, byte[] buffer, long buflen);
+
+            [DllImport("pdfium64.dll")]
+            public static extern int FPDFImageObj_GetImageFilterCount(IntPtr image_object);
+
+            [DllImport("pdfium64.dll")]
+            public static extern  long FPDFImageObj_GetImageFilter(IntPtr image_object, int index, StringBuilder stringBuilder, long buflen);
+
+            [DllImport("pdfium64.dll")]
+            public static extern BitmapFormats FPDFBitmap_GetFormat(IntPtr bitmap);
+
+            [DllImport("pdfium64.dll")]
+            public static extern IntPtr FPDFBitmap_GetBuffer(IntPtr bitmap);
+
+            [DllImport("pdfium64.dll")]
+            public static extern IntPtr FPDFImageObj_GetBitmap(IntPtr image_object);
+
+            [DllImport("pdfium64.dll")]
+            public static extern int FPDFBitmap_GetHeight(IntPtr bitmap);
+
+            [DllImport("pdfium64.dll")]
+            public static extern int FPDFBitmap_GetWidth(IntPtr bitmap);
+
+            [DllImport("pdfium64.dll")]
+            public static extern int FPDFBitmap_GetStride(IntPtr bitmap);
+
+            [DllImport("pdfium64.dll")]
+            public static extern bool FPDFImageObj_GetImageMetadata(IntPtr image_object, IntPtr page_object, [MarshalAs(UnmanagedType.LPStruct)] FPDF_IMAGEOBJ_METADATA metadata);
             #endregion
         }
 
@@ -894,6 +1048,33 @@ namespace PdfiumViewer
             ANNOT_SIG = 17
         }
 
+        public enum PageObjectTypes {
+            FPDF_PAGEOBJ_TEXT = 1,
+            FPDF_PAGEOBJ_PATH = 2,
+            FPDF_PAGEOBJ_IMAGE = 3,
+            FPDF_PAGEOBJ_SHADING = 4,
+            FPDF_PAGEOBJ_FORM = 5
+        }
+
+        public enum BitmapFormats
+        {
+            FXDIB_Invali = 0,
+            FXDIB_1bppMask = 257,
+            FXDIB_1bppRgb = 1,
+            FXDIB_1bppCmyk = 1025,
+            FXDIB_8bppMask = 264,
+            FXDIB_8bppRgb = 8,
+            FXDIB_8bppRgba = 520,
+            FXDIB_8bppCmyk = 1032,
+            FXDIB_8bppCmyka = 1544,
+            FXDIB_Rgb = 24,
+            FXDIB_Rgba = 536,
+            FXDIB_Rgb32 = 32,
+            FXDIB_Argb = 544,
+            FXDIB_Cmyk = 1056,
+            FXDIB_Cmyka = 1568
+        }
+
         public enum FPDFDOC_AACTION
         {
             WC = 0x10,
@@ -974,6 +1155,26 @@ namespace PdfiumViewer
             public int version;
             public IntPtr WriteBlock;
             public IntPtr stream;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class FPDF_IMAGEOBJ_METADATA
+        {
+            // The image width in pixels.
+            public uint width;
+            // The image height in pixels.
+            public uint height;
+            // The image's horizontal pixel-per-inch.
+            public float horizontal_dpi;
+            // The image's vertical pixel-per-inch.
+            public float vertical_dpi;
+            // The number of bits used to represent each pixel.
+            public uint bits_per_pixel;
+            // The image's colorspace. See above for the list of FPDF_COLORSPACE_*.
+            public int colorspace;
+            // The image's marked content ID. Useful for pairing with associated alt-text.
+            // A value of -1 indicates no ID.
+            public int marked_content_id;
         }
         #endregion
     }

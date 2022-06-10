@@ -1,0 +1,10 @@
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\bin\Debug\PdfiumViewer.TestTests.dll
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\bin\Debug\PdfiumViewer.TestTests.pdb
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\obj\Debug\PdfiumViewer.TestTests.csproj.AssemblyReference.cache
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\obj\Debug\PdfiumViewer.TestTests.csproj.CoreCompileInputs.cache
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\obj\Debug\PdfiumViewer.TestTests.csproj.CopyComplete
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\obj\Debug\PdfiumViewer.TestTests.dll
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\obj\Debug\PdfiumViewer.TestTests.pdb
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\bin\Debug\nunit.framework.dll
+E:\Project\PdfiumViewer-master\PdfiumViewer.TestTests\bin\Debug\nunit.framework.xml

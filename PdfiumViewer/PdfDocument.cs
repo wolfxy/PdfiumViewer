@@ -426,6 +426,16 @@ namespace PdfiumViewer
             return _file.Search(text, matchCase, wholeWord, startPage, endPage);
         }
 
+        public int GetPageCountObject(int page)
+        {
+            return _file.GetPageCountObject(page);
+        }
+
+        public List<Image> GetPageImages(int page)
+        {
+            return _file.GetPdfImages(page);
+        }
+
         /// <summary>
         /// Get all text on the page.
         /// </summary>
