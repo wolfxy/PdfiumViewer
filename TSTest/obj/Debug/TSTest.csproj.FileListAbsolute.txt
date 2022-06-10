@@ -38,3 +38,5 @@ E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.csproj.CoreCompileI
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.csproj.CopyComplete
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.dll
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.pdb
+E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\pdfium_x64.dll
+E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\pdfium_x86.dll

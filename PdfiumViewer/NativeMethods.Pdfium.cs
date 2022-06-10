@@ -556,6 +556,14 @@ namespace PdfiumViewer
             }
         }
 
+        public static IntPtr FPDFBitmap_GetBuffer(IntPtr image)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFBitmap_GetBuffer(image);
+            }
+        }
+
         public static long FPDFImageObj_GetImageFilter(IntPtr obj, int index, StringBuilder buffer, long length)
         {
             lock (LockString)
@@ -1058,21 +1066,25 @@ namespace PdfiumViewer
 
         public enum BitmapFormats
         {
-            FXDIB_Invali = 0,
-            FXDIB_1bppMask = 257,
-            FXDIB_1bppRgb = 1,
-            FXDIB_1bppCmyk = 1025,
-            FXDIB_8bppMask = 264,
-            FXDIB_8bppRgb = 8,
-            FXDIB_8bppRgba = 520,
-            FXDIB_8bppCmyk = 1032,
-            FXDIB_8bppCmyka = 1544,
-            FXDIB_Rgb = 24,
-            FXDIB_Rgba = 536,
-            FXDIB_Rgb32 = 32,
-            FXDIB_Argb = 544,
-            FXDIB_Cmyk = 1056,
-            FXDIB_Cmyka = 1568
+            /// <summary>
+            /// Gray scale bitmap, one byte per pixel.
+            /// </summary>
+            FPDFBitmap_Gray = 1,
+
+            /// <summary>
+            /// 3 bytes per pixel, byte order: blue, green, red.
+            /// </summary>
+            FPDFBitmap_BGR = 2,
+
+            /// <summary>
+            /// 4 bytes per pixel, byte order: blue, green, red, unused.
+            /// </summary>
+            FPDFBitmap_BGRx = 3,
+
+            /// <summary>
+            /// 4 bytes per pixel, byte order: blue, green, red, alpha.
+            /// </summary>
+            FPDFBitmap_BGRA = 4
         }
 
         public enum FPDFDOC_AACTION
