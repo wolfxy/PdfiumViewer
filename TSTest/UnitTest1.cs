@@ -66,7 +66,7 @@ namespace TSTest
                 using (var srcdocument = PdfiumViewer.PdfDocument.Load(src))
                 {
                     document.Merge(srcdocument);
-                    document.Save(@"D:\Users\Administrator\Desktop\1_6课课本-合并.pdf");
+                    document.Save(@"D:\Users\Administrator\Desktop\1_6.pdf");
                 }
             }
         }
