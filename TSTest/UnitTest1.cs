@@ -55,5 +55,20 @@ namespace TSTest
             //    Debug.WriteLine($"Page count is {pageCount}");
             //}
         }
+
+        [TestMethod]
+        public void TestMerge()
+        {
+            string file = @"D:\Users\Administrator\Desktop\1_6课课本.pdf";
+            string src = @"D:\Users\Administrator\Desktop\测试文件.pdf";
+            using (var document = PdfiumViewer.PdfDocument.Load(file))
+            {
+                using (var srcdocument = PdfiumViewer.PdfDocument.Load(src))
+                {
+                    document.Merge(srcdocument);
+                    document.Save(@"D:\Users\Administrator\Desktop\1_6课课本-合并.pdf");
+                }
+            }
+        }
     }
 }

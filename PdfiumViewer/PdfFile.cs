@@ -603,8 +603,51 @@ namespace PdfiumViewer
             return images;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other">The file will be merge to.</param>
+        /// <returns></returns>
+        public bool Merge(PdfFile other)
+        {
+            return Merge(other, null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other">The file will be merge to.</param>
+        /// <param name="range">A page range string, Such as "1,3,5-7". The first page is one. If |pagerange| is NULL, all pages from |src_doc| are imported.</param>
+        /// <returns></returns>
+        public bool Merge(PdfFile other, string range)
+        {
+            return Merge(_document, other._document, range);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="destDoc">The destination document for the pages.</param>
+        /// <param name="srcDoc">The document to be imported.</param>
+        /// <returns></returns>
+        public bool Merge(IntPtr destDoc, IntPtr srcDoc)
+        {
+            return Merge(destDoc, srcDoc, null);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="destDoc">The destination document for the pages.</param>
+        /// <param name="srcDoc">The document to be imported.</param>
+        /// <param name="range"> A page range string, Such as "1,3,5-7". The first page is one. If |pagerange| is NULL, all pages from |src_doc| are imported.</param>
+        /// <returns></returns>
+        public bool Merge(IntPtr destDoc, IntPtr srcDoc, string range)
+        {
+            int nowDestDocPagesCount = NativeMethods.FPDF_GetPageCount(destDoc);
+            return NativeMethods.FPDF_ImportPages(destDoc, srcDoc, range, nowDestDocPagesCount);
+        }
+
         // BGR TO RGB
-        public Bitmap Convert_BGRA_TO_ARGB(byte[] DATA, int width, int height)
+        private Bitmap Convert_BGRA_TO_ARGB(byte[] DATA, int width, int height)
         {
             Bitmap Bm = new Bitmap(width, height, PixelFormat.Format24bppRgb);
 

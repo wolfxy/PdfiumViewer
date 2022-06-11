@@ -426,11 +426,31 @@ namespace PdfiumViewer
             return _file.Search(text, matchCase, wholeWord, startPage, endPage);
         }
 
+        /// <summary>
+        /// Merge other file to this.
+        /// </summary>
+        /// <param name="other">The file will be merge for.</param>
+        /// <returns></returns>
+        public bool Merge(PdfDocument other)
+        {
+            return _file.Merge(other._file);
+        }
+
+        /// <summary>
+        /// Get count of objects in the page.
+        /// </summary>
+        /// <param name="page">The page to get objects for.</param>
+        /// <returns></returns>
         public int GetPageCountObject(int page)
         {
             return _file.GetPageCountObject(page);
         }
 
+        /// <summary>
+        /// Get all images in the page.
+        /// </summary>
+        /// <param name="page">The page to get images for.</param>
+        /// <returns></returns>
         public List<Image> GetPageImages(int page)
         {
             return _file.GetPdfImages(page);

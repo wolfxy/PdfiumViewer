@@ -602,6 +602,14 @@ namespace PdfiumViewer
             }
         }
 
+        public static bool FPDF_ImportPages(IntPtr destDoc, IntPtr srcDoc, string pageRange, int index)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDF_ImportPages(destDoc, srcDoc, pageRange, index);
+            }
+        }
+
         public static bool FPDF_SaveAsCopy(IntPtr doc, Stream output, FPDF_SAVE_FLAGS flags)
         {
             int id = StreamManager.Register(output);
@@ -964,6 +972,9 @@ namespace PdfiumViewer
 
             [DllImport("pdfium.dll")]
             public static extern bool FPDFImageObj_GetImageMetadata(IntPtr image_object, IntPtr page_object, [MarshalAs(UnmanagedType.LPStruct)] FPDF_IMAGEOBJ_METADATA metadata);
+
+         
+
             #endregion
         }
 
