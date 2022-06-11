@@ -14,7 +14,6 @@ E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Release\PdfiumViewer.xml
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Release\nl\PdfiumViewer.resources.dll
-E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Release\TSTest.csproj.AssemblyReference.cache
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Release\TSTest.csproj.CoreCompileInputs.cache
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Release\TSTest.csproj.CopyComplete
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Release\TSTest.dll

@@ -33,11 +33,27 @@ namespace PdfiumViewer
             _stream = stream;
             _id = StreamManager.Register(stream);
 
-            var document = NativeMethods.FPDF_LoadCustomDocument(stream, password, _id);
-            if (document == IntPtr.Zero)
-                throw new PdfException((PdfError)NativeMethods.FPDF_GetLastError());
+            try
+            {
+                var document = NativeMethods.FPDF_LoadCustomDocument(stream, password, _id);
+                if (document == IntPtr.Zero)
+                    throw new PdfException((PdfError)NativeMethods.FPDF_GetLastError());
 
-            LoadDocument(document);
+                LoadDocument(document);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    StreamManager.Unregister(_id);
+                    stream.Close();
+                }
+                catch(Exception)
+                {
+
+                }
+                throw;
+            }
         }
 
         public PdfBookmarkCollection Bookmarks { get; private set; }
