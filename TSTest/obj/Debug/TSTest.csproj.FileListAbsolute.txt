@@ -33,10 +33,7 @@ E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\PdfiumViewer.pdb
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\nl\PdfiumViewer.resources.dll
-E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.csproj.AssemblyReference.cache
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.csproj.CoreCompileInputs.cache
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.csproj.CopyComplete
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.dll
 E:\Project\PdfiumViewer\PdfiumViewer\TSTest\obj\Debug\TSTest.pdb
-E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\pdfium_x64.dll
-E:\Project\PdfiumViewer\PdfiumViewer\TSTest\bin\Debug\pdfium_x86.dll
