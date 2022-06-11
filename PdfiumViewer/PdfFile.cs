@@ -45,8 +45,12 @@ namespace PdfiumViewer
             {
                 try
                 {
-                    StreamManager.Unregister(_id);
-                    stream.Close();
+                    if (stream != null)
+                    {
+                        StreamManager.Unregister(_id);
+                        stream.Close();
+                        stream = null;
+                    }
                 }
                 catch(Exception)
                 {
