@@ -275,6 +275,18 @@ namespace PdfiumViewer
             }
         }
 
+        public static string FPDFTextObject_GetText(IntPtr page, IntPtr textObject)
+        {
+            lock (LockString)
+            {
+                //ulong size = Imports.FPDFTextObj_GetText(textObject, page, null, 0);
+                //StringBuilder stringBuilder = new StringBuilder((int)size);
+                //Imports.FPDFTextObj_GetText(textObject, page, stringBuilder, size);
+                //return stringBuilder.ToString();
+                return null;
+            }
+        }
+
         public static int FPDFText_GetText(IntPtr page, int start_index, int count, byte[] result)
         {
             lock (LockString)
@@ -973,7 +985,8 @@ namespace PdfiumViewer
             [DllImport("pdfium.dll")]
             public static extern bool FPDFImageObj_GetImageMetadata(IntPtr image_object, IntPtr page_object, [MarshalAs(UnmanagedType.LPStruct)] FPDF_IMAGEOBJ_METADATA metadata);
 
-         
+            [DllImport("pdfium.dll")]
+            public static extern ulong FPDFTextObj_GetText(IntPtr text_object, IntPtr text_page, StringBuilder buffer, ulong length);
 
             #endregion
         }

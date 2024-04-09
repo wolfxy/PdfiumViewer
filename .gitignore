@@ -7,3 +7,5 @@ Thumbs.db
 /_ReSharper*
 /packages
 /.vs
+TSTest/bin/*
+TSTest/obj/*

@@ -461,6 +461,16 @@ namespace PdfiumViewer
         /// </summary>
         /// <param name="page">The page to get the text for.</param>
         /// <returns>The text on the page.</returns>
+        public string GetPdfText2(int page)
+        {
+            return _file.GetPdfText2(page);
+        }
+
+        /// <summary>
+        /// Get all text on the page.
+        /// </summary>
+        /// <param name="page">The page to get the text for.</param>
+        /// <returns>The text on the page.</returns>
         public string GetPdfText(int page)
         {
             return _file.GetPdfText(page);

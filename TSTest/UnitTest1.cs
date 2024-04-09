@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PdfiumViewer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -68,6 +69,18 @@ namespace TSTest
                     document.Merge(srcdocument);
                     document.Save(@"D:\Users\Administrator\Desktop\1_6.pdf");
                 }
+            }
+        }
+
+        [TestMethod]
+        public void TestExtractText()
+        {
+            string file = @"D:\Users\Administrator\Desktop\文档1.pdf";
+            //string src = @"D:\Users\Administrator\Desktop\测试文件.pdf";
+            using (var document = PdfiumViewer.PdfDocument.Load(file))
+            {
+                string text = document.GetPdfText2(0);
+                Console.WriteLine(text);
             }
         }
     }

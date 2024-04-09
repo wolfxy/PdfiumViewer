@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using static PdfiumViewer.NativeMethods;
 
 namespace PdfiumViewer
@@ -52,7 +53,7 @@ namespace PdfiumViewer
                         stream = null;
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
 
                 }
@@ -513,6 +514,8 @@ namespace PdfiumViewer
             }
         }
 
+
+
         public List<Image> GetPdfImages(int page)
         {
             List<Image> images = new List<Image>();
@@ -529,70 +532,83 @@ namespace PdfiumViewer
                         {
                             try
                             {
-                                IntPtr bitmap = NativeMethods.FPDFImageObj_GetBitmap(obj);
-                                int height = NativeMethods.FPDFBitmap_GetHeight(bitmap);
-                                int width = NativeMethods.FPDFBitmap_GetWidth(bitmap);
-                                int stride = NativeMethods.FPDFBitmap_GetStride(bitmap);
-                                IntPtr pointer = NativeMethods.FPDFBitmap_GetBuffer(bitmap);
-                                BitmapFormats format = NativeMethods.FPDFBitmap_GetFormat(bitmap);
-                                FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
-                                Bitmap bmp = null;
-                                switch (format) { 
-                                    case BitmapFormats.FPDFBitmap_BGR:
-                                        bmp = new Bitmap(width, height, stride, PixelFormat.Format24bppRgb, pointer);
-                                        break;
-                                    case BitmapFormats.FPDFBitmap_BGRA:
-                                         bmp = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
-                                         break;
-                                    case BitmapFormats.FPDFBitmap_BGRx:
-                                        bmp = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
-                                        break;
-                                    case BitmapFormats.FPDFBitmap_Gray:
-                                        bmp = new Bitmap(width, height, stride, PixelFormat.Format8bppIndexed, pointer);
-                                        bmp.SetResolution(metadata.horizontal_dpi, metadata.vertical_dpi);
-
-                                        //long dataLength = height * width;
-                                        //byte[] dataBuffer = new byte[dataLength];
-                                        //Marshal.Copy(pointer, dataBuffer, 0, (int)dataLength);
-                                        //bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
-                                        //bmp.SetResolution(metadata.horizontal_dpi, metadata.vertical_dpi);
-                                        //BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
-                                        //Marshal.Copy(dataBuffer, 0, data.Scan0, (int)dataLength);
-                                        //bmp.UnlockBits(data);
-
-                                        break;
-                                }
-                                //FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
-                                //long bufferSize2 = height * width * metadata.bits_per_pixel / 8;
-                                //long bufferSize2 = height * stride;
-                                //byte[] dataBuffer = new byte[bufferSize2];
-                                //Marshal.Copy(pointer, dataBuffer, 0, (int)bufferSize2);
-                                //var nbitmap = Convert_DATA_TO_BITMAP(dataBuffer, stride, width, height);
-                                //var nbitmap = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
-                                if (bmp != null)
+                                long length = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, null, 0);
+                                byte[] buffer = new byte[length];
+                                NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, length);
+                                try
                                 {
-                                    images.Add(bmp);
+                                    MemoryStream ms = new MemoryStream(buffer);
+                                    Image image = Image.FromStream(ms);
+                                    images.Add(image);
                                 }
-                                //nbitmap.Save($"D:\\Users\\Administrator\\Desktop\\imgs\\TMP_{index}.png", ImageFormat.Png);
-                                //long bufferSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, null, 0);
-                                //byte[] buffer = new byte[bufferSize];
-                                ////long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
-                                //long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
-                                //Bitmap bmp = Convert_BGRA_TO_ARGB(buffer, width, height);
-                                //images.Add(bmp);
-                                //long  dataSize = bufferSize;
-                                //MemoryStream memoryStream = new MemoryStream(buffer, 0, (int)dataSize);
-                                //Image img = Bitmap.FromStream(memoryStream);
-                                //images.Add(img);
-                                //int filterCount = NativeMethods.FPDFImageObj_GetImageFilterCount(obj);
-                                //if (filterCount > 0)
-                                //{
-                                //    StringBuilder stringBuilder = new StringBuilder(256);
-                                //    long filterLen = NativeMethods.FPDFImageObj_GetImageFilter(obj, 0, stringBuilder, 256);
-                                //    string n = stringBuilder.ToString();
-                                //}
+                                catch (Exception)
+                                {
+                                    IntPtr bitmap = NativeMethods.FPDFImageObj_GetBitmap(obj);
+                                    int height = NativeMethods.FPDFBitmap_GetHeight(bitmap);
+                                    int width = NativeMethods.FPDFBitmap_GetWidth(bitmap);
+                                    int stride = NativeMethods.FPDFBitmap_GetStride(bitmap);
+                                    IntPtr pointer = NativeMethods.FPDFBitmap_GetBuffer(bitmap);
+                                    BitmapFormats format = NativeMethods.FPDFBitmap_GetFormat(bitmap);
+                                    FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
+                                    Bitmap bmp = null;
+                                    switch (format)
+                                    {
+                                        case BitmapFormats.FPDFBitmap_BGR:
+                                            bmp = new Bitmap(width, height, stride, PixelFormat.Format24bppRgb, pointer);
+                                            break;
+                                        case BitmapFormats.FPDFBitmap_BGRA:
+                                            bmp = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
+                                            break;
+                                        case BitmapFormats.FPDFBitmap_BGRx:
+                                            bmp = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
+                                            break;
+                                        case BitmapFormats.FPDFBitmap_Gray:
+                                            bmp = new Bitmap(width, height, stride, PixelFormat.Format8bppIndexed, pointer);
+                                            bmp.SetResolution(metadata.horizontal_dpi, metadata.vertical_dpi);
+
+                                            //long dataLength = height * width;
+                                            //byte[] dataBuffer = new byte[dataLength];
+                                            //Marshal.Copy(pointer, dataBuffer, 0, (int)dataLength);
+                                            //bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+                                            //bmp.SetResolution(metadata.horizontal_dpi, metadata.vertical_dpi);
+                                            //BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+                                            //Marshal.Copy(dataBuffer, 0, data.Scan0, (int)dataLength);
+                                            //bmp.UnlockBits(data);
+
+                                            break;
+                                    }
+                                    //FPDF_IMAGEOBJ_METADATA metadata = FPDFImageObj_GetImageMetadata(obj, pageData.Page);
+                                    //long bufferSize2 = height * width * metadata.bits_per_pixel / 8;
+                                    //long bufferSize2 = height * stride;
+                                    //byte[] dataBuffer = new byte[bufferSize2];
+                                    //Marshal.Copy(pointer, dataBuffer, 0, (int)bufferSize2);
+                                    //var nbitmap = Convert_DATA_TO_BITMAP(dataBuffer, stride, width, height);
+                                    //var nbitmap = new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, pointer);
+                                    if (bmp != null)
+                                    {
+                                        images.Add(bmp);
+                                    }
+                                    //nbitmap.Save($"D:\\Users\\Administrator\\Desktop\\imgs\\TMP_{index}.png", ImageFormat.Png);
+                                    //long bufferSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, null, 0);
+                                    //byte[] buffer = new byte[bufferSize];
+                                    ////long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
+                                    //long dataSize = NativeMethods.FPDFImageObj_GetImageDataRaw(obj, buffer, bufferSize);
+                                    //Bitmap bmp = Convert_BGRA_TO_ARGB(buffer, width, height);
+                                    //images.Add(bmp);
+                                    //long  dataSize = bufferSize;
+                                    //MemoryStream memoryStream = new MemoryStream(buffer, 0, (int)dataSize);
+                                    //Image img = Bitmap.FromStream(memoryStream);
+                                    //images.Add(img);
+                                    //int filterCount = NativeMethods.FPDFImageObj_GetImageFilterCount(obj);
+                                    //if (filterCount > 0)
+                                    //{
+                                    //    StringBuilder stringBuilder = new StringBuilder(256);
+                                    //    long filterLen = NativeMethods.FPDFImageObj_GetImageFilter(obj, 0, stringBuilder, 256);
+                                    //    string n = stringBuilder.ToString();
+                                    //}
+                                }
                             }
-                            catch(Exception e)
+                            catch (Exception)
                             {
 
                             }
@@ -669,12 +685,35 @@ namespace PdfiumViewer
             return Bm;
         }
 
+        public string GetPdfText2(int page)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            using (var pageData = new PageData(_document, _form, page))
+            {
+                int count = NativeMethods.FPDFPage_Count_Object(pageData.Page);
+                if (count > 0)
+                {
+                    for (var index = 0; index < count; index++)
+                    {
+                        var obj = NativeMethods.FPDFPage_GetObject(pageData.Page, index);
+                        PageObjectTypes type = NativeMethods.FPDFPageObject_GetType(obj);
+                        if (PageObjectTypes.FPDF_PAGEOBJ_TEXT == type)
+                        {
+                            string str = GetPdfTextObjectText(pageData, obj);
+                            stringBuilder.Append(str);
+                        }
+                    }
+                }
+            }
+            return stringBuilder.ToString();
+        }
+
         public string GetPdfText(int page)
         {
             using (var pageData = new PageData(_document, _form, page))
             {
                 int length = NativeMethods.FPDFText_CountChars(pageData.TextPage);
-                return GetPdfText(pageData, new PdfTextSpan(page, 0, length));
+                return GetPdfText(pageData, new PdfTextSpan(page, 0, length + 1));
             }
         }
 
@@ -693,12 +732,17 @@ namespace PdfiumViewer
             return FPDFEncoding.GetString(result, 0, textSpan.Length * 2);
         }
 
-        public void DeletePage (int pageNumber)
+        private string GetPdfTextObjectText(PageData pageData, IntPtr textObject)
+        {
+            return NativeMethods.FPDFTextObject_GetText(pageData.Page, textObject);
+        }
+
+        public void DeletePage(int pageNumber)
         {
             NativeMethods.FPDFPage_Delete(_document, pageNumber);
         }
 
-        public void RotatePage (int pageNumber, PdfRotation rotation)
+        public void RotatePage(int pageNumber, PdfRotation rotation)
         {
             using (var pageData = new PageData(_document, _form, pageNumber))
             {
